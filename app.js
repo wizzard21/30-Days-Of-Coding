@@ -1,52 +1,39 @@
 const express = require('express');
-const bodyParser = require('body-parser');
-const mongoose = require("mongoose");
 const app = express();
+const ejs = require("ejs");
+const bodyParser = require('body-parser');
+const path = require("path");
+const connectDB = require("./src/config/db");
+const routes = require("./src/routes/routes");
 
-app.use(bodyParser.json())
-app.use(express.static('public'))
-app.use(bodyParser.urlencoded({
-    extended:true
-}))
-mongoose.connect('mongodb://localhost:27017/webproject', {
-    useNewUrlParser: true,
-    useUnifiedTopology:true
-});
-var db = mongoose.connection;
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
-db.on('error', () => console.log("Error in connecting to database"));
-db.once('open', () => console.log("connected to Database"));
+app.use(express.static("public"));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.urlencoded({extended: true}));
 
-app.post("/signup", (req, res) => {
-    // console.log("check")
-    let name = req.body.name;
-    let gender = req.body.gender;
-    let email = req.body.email;
-    let pass = req.body.password;
-    let userName = req.body.username;
-    var data = {
-        "name": name,
-        "gender": gender,
-		"email": email,
-		"username":userName,
-        "pass": pass
-    }
-    db.collection('users').insertOne(data, (err, collection) => {
-        if (err) {
-            throw err;
-        }
-        console.log("inserted");
-        
-    });
-    return res.redirect('login.html');
+
+app.use("/", routes);
+
+app.all('*', (req, res, next) => {
+    next(res.render("pageNotFound", {
+        title: "Page Not Found"
+    }))
 })
 
+app.use((err, req, res, next) => {
+    const {statusCode = 500} = err;
+    console.log(err);
+    if(!err.message) err.message = "Something went wrong";
+    res.status(statusCode).render('error', {err});
+})
 
-// console.log("check")
-app.get("/", (req, res) => {
-    res.set({
-        "Allow-access-Allow-Origin": '*'
-    })
-    console.log("check")
-    return res.redirect('index.html');
-}).listen(3000);
+connectDB();
+
+const port = process.env.PORT || 3000;
+
+//connecting server
+app.listen(port, function () {
+    console.log(`Server Started on port: ${port}`);
+});
