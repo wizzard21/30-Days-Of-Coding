@@ -42,11 +42,11 @@ app.post("/signup", (req, res) => {
 })
 
 
-console.log("check")
+// console.log("check")
 app.get("/", (req, res) => {
     res.set({
         "Allow-access-Allow-Origin": '*'
     })
-    // console.log("check")
-    return res.redirect('login.html');
-}).listen(4000);
+    console.log("check")
+    return res.redirect('index.html');
+}).listen(3000);
