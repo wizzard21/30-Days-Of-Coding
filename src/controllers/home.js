@@ -1,116 +1,95 @@
-const { ValidateName, ValidateEmail, ValidatePhone, ValidateUsername } = require("../validations/validation");
-// const { connectDB } = require("../config/db");
-// const connectDB = require("../config/db");
-
-// connectDB();
-// by calling its not working....check if possible
-
-const mongoose = require("mongoose");
-const { status, redirect } = require("express/lib/response");
-mongoose.connect('mongodb://localhost:27017/webproject', {
-        useNewUrlParser: true,
-        useUnifiedTopology:true
-});
-const db = mongoose.connection;
-    
-db.on('error', () => console.log("Error in connecting to database"));
-db.once('open', () => console.log("connected to Database"));
+const { ValidateName, ValidateEmail, ValidateUsername } = require("../validations/validation");
+const User = require('../models/users');
     
 
 module.exports.renderHome = (req, res) => {
-    res.set({
-        "Allow-access-Allow-Origin": '*'
-    })
-    console.log("check")
-    return res.redirect('index.html');
+    res.render('index');
 }
 
 module.exports.renderLogin = (req, res) => {
-    res.set({
-        "Allow-access-Allow-Origin": '*'
-    })
-    console.log("check")
-    return res.redirect('login.html');
+    if(!req.user){
+        res.render('login');
+    }
+    else{
+        req.flash('error', 'Logout first !');
+        res.redirect('/');
+    }
+}
+
+module.exports.loginUser = (req, res) => {
+    req.flash("success", "Successfully logged in !");
+    res.redirect('/');
+}
+
+module.exports.logoutUser = (req, res) => {
+    req.logout();
+    req.flash('success', 'Successfully logged out !');
+    res.redirect('/login');
 }
 
 module.exports.renderSignUp = (req, res) => {
-    res.set({
-        "Allow-access-Allow-Origin": '*'
-    })
-    console.log("check")
-    return res.redirect('signup.html');
+    res.render('signup');
 }
 
 module.exports.SignUp = async(req, res) => {
-    // console.log("check")
     const {name, gender, email, password, username} = req.body;
     console.log(req.body);
     
     if (name.length == 0 || email.length == 0 || gender.length == 0 || username.length == 0 || password.length == 0) {
-        console.log("Error: Input marked as * cannot be empty !");
+        req.flash("error", "Error: Input marked as * cannot be empty !");
+        res.redirect("/signup");
     }
     else if (!ValidateName(name)) {
-      console.log("Error: Invalid name..It must only contains (a-z, A-Z) !");
+        req.flash("error", "Error: Invalid name..It must only contains (a-z, A-Z) !");
+        res.redirect("/signup");
     }
     else if (!ValidateUsername(username)) {
-      console.log("Error: Invalid username !");
+        req.flash("error", "Error: Invalid username !");
+        res.redirect("/signup");
     }
     else if (!ValidateEmail(email)) {
-      console.log("Error: Invalid email..It must contains('@' and '.') !");
+        req.flash("error", "Error: Invalid email..It must contains('@' and '.') !");
+        res.redirect("/signup");
     }
     else {
-      var data = {
-          "name": name,
-          "gender": gender,
-	  	  "email": email,
-	  	  "username":username,
-          "pass": password,
-          "level": 0
-      }
-      await db.collection('users').insertOne(data, (err, collection) => {
-          if (err) {
-              throw err;
-          }
-          console.log("inserted");
-
-      });
-      return res.redirect('login.html');
-    }
-}
-
-
-const Schema = mongoose.Schema;
-
-const User = mongoose.model('users', Schema({
-    name: String,
-    gender: String,
-    email: String,
-    username: String,
-    pass: String,
-    level:Number
-}));
-module.exports.LogIn = async (req, res) => {
-    let username = req.body.username;
-    let pass = req.body.password;
-    const allData = await User.find({});
-    let data={"level":-1};
-    for (let i = 0; i < allData.length; i++){
-        if (allData[i].username == username && allData[i].pass == pass) {
-            data.level = allData[i].level;
-            break;
+        let user;
+        const existingUser = await User.findOne({username: username});
+        if(existingUser){
+          req.flash("error", "Error: User already exists !");
+          res.redirect("/signup");
+        }
+        else{
+            user = new User({ name, gender, email, username, level: 0 });
+            await User.register(user, password);
+            req.flash("success", "Success! New user created !");
+            res.redirect("/login");
         }
     }
-    // console.log(data);
-    if (data.level == -1) {
-        console.log("User not found");
-        // pop up message required.
-        return res.redirect('signup.html');
-    }
-    else {
-        // add a pop up message that user entered successfully..later.
-        let red = "page" + (data.level.toString());
-        return res.redirect(red);
-    }
-    // res.json(data);
-    
 }
+
+
+// module.exports.LogIn = async (req, res) => {
+//     let username = req.body.username;
+//     let pass = req.body.password;
+//     const allData = await User.find({});
+//     let data={"level":-1};
+//     for (let i = 0; i < allData.length; i++){
+//         if (allData[i].username == username && allData[i].pass == pass) {
+//             data.level = allData[i].level;
+//             break;
+//         }
+//     }
+//     // console.log(data);
+//     if (data.level == -1) {
+//         console.log("User not found");
+//         // pop up message required.
+//         return res.redirect('signup.html');
+//     }
+//     else {
+//         // add a pop up message that user entered successfully..later.
+//         let red = "page" + (data.level.toString());
+//         return res.redirect(red);
+//     }
+//     // res.json(data);
+    
+// }
