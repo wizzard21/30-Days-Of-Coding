@@ -30,6 +30,11 @@ module.exports.logoutUser = (req, res) => {
 module.exports.renderSignUp = (req, res) => {
     res.render('signup');
 }
+// module.exports.renderPage0 = (req, res) => {
+//     res.render('page0');
+// }
+
+
 
 module.exports.SignUp = async(req, res) => {
     const {name, gender, email, password, username} = req.body;

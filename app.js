@@ -58,7 +58,7 @@ app.use((err, req, res, next) => {
 
 connectDB();
 
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 5000;
 
 //connecting server
 app.listen(port, function () {

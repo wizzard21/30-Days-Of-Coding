@@ -10,8 +10,7 @@ const router = express.Router();
 router.route("/login")
     .get(renderLogin)
     .post(passport.authenticate('local', { failureFlash: true, failureRedirect: '/login' }), loginUser);
-
-router.route("/logout").get(isLoggedIn, logoutUser);
+router.route("/page0").get(isLoggedIn, logoutUser);
 
 router.route("/signup")
     .get(renderSignUp)
