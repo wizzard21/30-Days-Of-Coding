@@ -6,6 +6,10 @@ module.exports.renderHome = (req, res) => {
     res.render('index');
 }
 
+module.exports.renderPage0 = (req, res) => {
+    res.render('page0');
+}
+
 module.exports.renderLogin = (req, res) => {
     if(!req.user){
         res.render('login');
@@ -18,7 +22,7 @@ module.exports.renderLogin = (req, res) => {
 
 module.exports.loginUser = (req, res) => {
     req.flash("success", "Successfully logged in !");
-    res.redirect('/');
+    res.redirect('/page0');
 }
 
 module.exports.logoutUser = (req, res) => {
