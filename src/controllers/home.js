@@ -28,7 +28,7 @@ module.exports.loginUser = (req, res) => {
 module.exports.logoutUser = (req, res) => {
     req.logout();
     req.flash('success', 'Successfully logged out !');
-    res.redirect('/login');
+    res.redirect('/');
 }
 
 module.exports.renderSignUp = (req, res) => {
