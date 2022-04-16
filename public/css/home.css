@@ -3,27 +3,27 @@
     padding: 0;
 }
 
-.container{
+.con{
     height: 100vh;
     width: 100%;
+    padding: 20px;
     background-position: center;
     background-image: url(../img/background.png);
     background-size: cover;
-    padding: 5% 5%;
-    box-sizing: border-box;
-    position: relative;
+    /* box-sizing: border-box;
+    position: relative; */
     /* background: linear-gradient(225deg,#22d7e4,#e63872); */
     /* background: linear-gradient(5deg,#e91e63,#03a9f4); */
 }
 /* navigation bar */
-.navBar{
+/* .navBar{
     width: 100%;
     height: 5vh;
     margin: auto;
     display: flex;
     align-items: center;
-}
-nav{
+} */
+/* nav{
     flex: 1;
     padding-left: 42px;
 }
@@ -36,7 +36,7 @@ nav ul li a{
     text-decoration: none;
     font-size: x-large;
     color: #333;
-}
+} */
 
 /* content*/
 

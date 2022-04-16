@@ -6,8 +6,10 @@ module.exports.renderHome = (req, res) => {
     res.render('index');
 }
 
-module.exports.renderPage0 = (req, res) => {
-    res.render('page0');
+module.exports.renderLeaderboard = async(req, res) => {
+    const users = await User.find().sort({"level": -1});
+    console.log(users);
+    res.render('leaderboard', {users});
 }
 
 module.exports.renderLogin = (req, res) => {
@@ -34,11 +36,6 @@ module.exports.logoutUser = (req, res) => {
 module.exports.renderSignUp = (req, res) => {
     res.render('signup');
 }
-// module.exports.renderPage0 = (req, res) => {
-//     res.render('page0');
-// }
-
-
 
 module.exports.SignUp = async(req, res) => {
     const {name, gender, email, password, username} = req.body;
@@ -68,37 +65,10 @@ module.exports.SignUp = async(req, res) => {
           res.redirect("/signup");
         }
         else{
-            user = new User({ name, gender, email, username, level: 0 });
+            user = new User({ name, gender, email, username, level: 1, score: 0 });
             await User.register(user, password);
             req.flash("success", "Success! New user created !");
             res.redirect("/login");
         }
     }
 }
-
-
-// module.exports.LogIn = async (req, res) => {
-//     let username = req.body.username;
-//     let pass = req.body.password;
-//     const allData = await User.find({});
-//     let data={"level":-1};
-//     for (let i = 0; i < allData.length; i++){
-//         if (allData[i].username == username && allData[i].pass == pass) {
-//             data.level = allData[i].level;
-//             break;
-//         }
-//     }
-//     // console.log(data);
-//     if (data.level == -1) {
-//         console.log("User not found");
-//         // pop up message required.
-//         return res.redirect('signup.html');
-//     }
-//     else {
-//         // add a pop up message that user entered successfully..later.
-//         let red = "page" + (data.level.toString());
-//         return res.redirect(red);
-//     }
-//     // res.json(data);
-    
-// }

@@ -14,6 +14,9 @@ const UserSchema = new Schema({
     },
     level: {
         type: Number
+    },
+    score: {
+        type: Number
     }
 },
     {
