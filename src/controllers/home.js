@@ -6,6 +6,10 @@ module.exports.renderHome = (req, res) => {
     res.render('index');
 }
 
+module.exports.renderEditor = (req, res) => {
+    res.render('editor');
+}
+
 module.exports.renderLeaderboard = async(req, res) => {
     const users = await User.find().sort({"level": -1});
     console.log(users);
