@@ -4,9 +4,10 @@
 }
 
 .con{
-    height: 100vh;
-    width: 100%;
-    padding: 20px;
+    height: 92.5vh;
+    padding-top: 180px;
+    padding-left: 250px;
+    padding-right: 200px;
     background-position: center;
     background-image: url(../img/background.png);
     background-size: cover;
