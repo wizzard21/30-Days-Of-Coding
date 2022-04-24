@@ -43,7 +43,7 @@
     <div class="con container-fluid">
         <%- include('partials/flash')%>
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12 table-responsive">
-            <h1>Leaderboard</h1>
+            <h1 class="text-center pb-4 mb-4" style="color: rgb(35, 3, 133);"><i class="fa-solid fa-trophy"></i>&nbsp;Leaderboard&nbsp;<i class="fa-solid fa-trophy"></i></h1>
             <table class="table table-bordered table-striped align-middle text-center hover" id="leaderboard">
                 <thead>
                   <tr>
@@ -58,7 +58,7 @@
                 <% for(let user of users){ %>
                   <tr>
                     <th scope="row"><%= count %></th>
-                    <td><%= user.username %></td>
+                    <td><a href=/user/<%= user.username %>><%= user.username %></a></td>
                     <td><%= user.level %></td>
                     <td><%= user.score %></td>
                   </tr>

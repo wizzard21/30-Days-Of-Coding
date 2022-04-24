@@ -2,7 +2,7 @@ const express = require("express");
 const passport = require('passport');
 const catchAsync = require('../utils/catchAsync');
 const { isLoggedIn } = require('../../middleware');
-const {renderHome, renderEditor, renderLeaderboard, renderLogin, loginUser, logoutUser, renderSignUp, SignUp} = require("../controllers/home");
+const {renderHome, renderEditor, renderProfile, renderLeaderboard, renderLogin, loginUser, logoutUser, renderSignUp, SignUp} = require("../controllers/home");
 const {start, renderPage0, renderPage1, renderPage2, renderPage3, renderPage4, renderPage5, renderPage6, renderPage7, renderPage8, renderPage9, renderPage10, renderPage11, renderPage12, renderPage13, renderPage14, renderPage15, renderPage16, renderPage17, renderPage18, renderPage19, renderPage20} = require("../controllers/pages");
 const {submitPage1, submitPage2, submitPage3, submitPage4, submitPage5, submitPage6, submitPage7, submitPage8, submitPage9, submitPage10,submitPage11, submitPage12, submitPage13, submitPage14, submitPage15, submitPage16, submitPage17, submitPage18, submitPage19, submitPage20} = require("../controllers/pages");
 
@@ -21,6 +21,8 @@ router.route("/signup")
 router.route("/leaderboard").get(renderLeaderboard);
 
 router.route("/editor").get(renderEditor);
+
+router.route("/user/:id").get(renderProfile);
 
 router.route("/start").get(isLoggedIn, start);
 

@@ -10,9 +10,15 @@ module.exports.renderEditor = (req, res) => {
     res.render('editor');
 }
 
+module.exports.renderProfile = async(req, res) => {
+    const username = req.params.id;
+    const user = await User.find({"username": username});
+    console.log(user);
+    res.render('profile', {user});
+}
+
 module.exports.renderLeaderboard = async(req, res) => {
     const users = await User.find().sort({"level": -1});
-    console.log(users);
     res.render('leaderboard', {users});
 }
 
